@@ -2,7 +2,6 @@ package models
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"github.com/haffjjj/myblog-api/db/mongo"
@@ -11,12 +10,12 @@ import (
 
 // Post is struct for model post
 type Post struct {
-	Title       string   `json:"title"`
-	Thumbnail   string   `json:"thumbnail"`
-	Tag         []string `json:"tag"`
-	CreatedAt   string   `json:"createdAt"`
-	ReadingTime string   `json:"readingTime"`
-	Content     string   `json:"content"`
+	Title       string   `json:"title" bson:"title"`
+	Thumbnail   string   `json:"thumbnail" bson:"thumbnail"`
+	CreatedAt   string   `json:"createdAt" bson:"createdAt"`
+	ReadingTime string   `json:"readingTime" bson:"readingTime"`
+	Tag         []string `json:"tag" bson:"tag"`
+	Content     string   `json:"content" bson:"content"`
 }
 
 //GetPosts is model for getPosts
@@ -40,7 +39,7 @@ func GetPosts() []*Post {
 			log.Fatal(err)
 		}
 		posts = append(posts, &elem)
-		fmt.Println(cur.Current)
+		// fmt.Println(cur.Current)
 	}
 
 	if err := cur.Err(); err != nil {
