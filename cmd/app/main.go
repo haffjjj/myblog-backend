@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/haffjjj/myblog-api/db/mongo"
-	"github.com/haffjjj/myblog-api/router"
+	"github.com/haffjjj/myblog-api-backend/db/mongo"
+	"github.com/haffjjj/myblog-api-backend/router"
 	"github.com/rs/cors"
 )
 
