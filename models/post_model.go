@@ -25,7 +25,7 @@ type postsGroup struct {
 }
 
 //GetPosts is model for getPosts
-func GetPosts() []*postsGroup {
+func GetPostsGroups() []*postsGroup {
 
 	var client = mongo.MongoSession.Client
 	var collection = client.Database("myblog").Collection("posts")

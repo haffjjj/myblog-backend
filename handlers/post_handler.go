@@ -8,15 +8,12 @@ import (
 )
 
 //GetPost is handlers
-func GetPost(w http.ResponseWriter, r *http.Request) {
+func GetPostsGroups(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 
-	getPosts := models.GetPosts()[0]
-	postsGroup, _ := json.Marshal(getPosts)
+	getPostsGroups := models.GetPostsGroups()
+	postsGroups, _ := json.Marshal(getPostsGroups)
 
-	// // w.Write(posts)
-	// fmt.Println(posts)
-
-	w.Write(postsGroup)
+	w.Write(postsGroups)
 }

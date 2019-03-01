@@ -19,9 +19,15 @@ type Routes []Route
 
 var routes = Routes{
 	Route{
-		"GetPosts",
+		"GetPostsGroups",
 		"GET",
-		"/posts",
-		handler.GetPost,
+		"/postsGroups",
+		handler.GetPostsGroups,
 	},
+	// Route{
+	// 	"Get",
+	// 	"GET",
+	// 	"/posts",
+	// 	handler.GetPostGroups,
+	// },
 }
