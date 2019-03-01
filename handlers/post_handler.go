@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/haffjjj/myblog-api/models"
+	"github.com/haffjjj/myblog-api-backend/models"
 )
 
 //GetPost is handlers

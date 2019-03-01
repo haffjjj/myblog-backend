@@ -3,7 +3,7 @@ package router
 import (
 	"net/http"
 
-	handler "github.com/haffjjj/myblog-api/handlers"
+	handler "github.com/haffjjj/myblog-api-backend/handlers"
 )
 
 // Route type description

@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/haffjjj/myblog-api/db/mongo"
+	"github.com/haffjjj/myblog-api-backend/db/mongo"
 	"github.com/mongodb/mongo-go-driver/bson"
 )
 
