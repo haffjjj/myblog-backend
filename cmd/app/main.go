@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -21,10 +22,9 @@ func init() {
 
 func main() {
 
+	fmt.Println("Starting sever..")
 	router := router.NewRouter()
-
 	err := http.ListenAndServe(":8000", setupGlobalMiddleware(router))
-
 	if err == nil {
 		log.Fatal(err)
 	}

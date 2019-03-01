@@ -1,11 +1,13 @@
-package models
+package main
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"log"
 
-	"github.com/haffjjj/myblog-api/db/mongo"
 	"github.com/mongodb/mongo-go-driver/bson"
+	"github.com/mongodb/mongo-go-driver/mongo"
 )
 
 // Post is struct for model post
@@ -24,16 +26,28 @@ type postsGroup struct {
 	Data  []Post `json:"data" bson:"data"`
 }
 
-//GetPosts is model for getPosts
-func GetPosts() []*postsGroup {
+func main() {
+	client, err := mongo.Connect(context.TODO(), "mongodb://localhost:27017")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	var client = mongo.MongoSession.Client
+	err = client.Ping(context.TODO(), nil)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Connected to MongoDB!")
+
 	var collection = client.Database("myblog").Collection("posts")
 
 	var postsGroups []*postsGroup
 
+	// pipeline := mongo.Pipeline{}
+
 	//aggregate to get data
-	cur, err := collection.Aggregate(context.TODO(), []bson.D{
+	cur, err := collection.Aggregate(context.TODO(), mongo.Pipeline{
 		bson.D{
 			{"$group", bson.D{
 				{"_id", nil},
@@ -76,6 +90,8 @@ func GetPosts() []*postsGroup {
 			log.Fatal(err)
 		}
 		postsGroups = append(postsGroups, &elem)
+
+		// fmt.Println(cur.Current)
 	}
 
 	if err := cur.Err(); err != nil {
@@ -84,5 +100,7 @@ func GetPosts() []*postsGroup {
 
 	cur.Close(context.TODO())
 
-	return postsGroups
+	res, _ := json.Marshal(postsGroups[0])
+
+	fmt.Println(string(res))
 }
