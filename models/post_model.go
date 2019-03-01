@@ -24,8 +24,12 @@ type postsGroup struct {
 	Data  []Post `json:"data" bson:"data"`
 }
 
+type GetPostsGroupsFilter struct {
+	Tag string
+}
+
 //GetPosts is model for getPosts
-func GetPostsGroups() []*postsGroup {
+func GetPostsGroups(f GetPostsGroupsFilter) []*postsGroup {
 
 	var client = mongo.MongoSession.Client
 	var collection = client.Database("myblog").Collection("posts")
@@ -34,6 +38,13 @@ func GetPostsGroups() []*postsGroup {
 
 	//aggregate to get data
 	cur, err := collection.Aggregate(context.TODO(), []bson.D{
+		bson.D{
+			{"$match", bson.D{
+				{"tag", bson.D{
+					{"$regex", f.Tag},
+				}},
+			}},
+		},
 		bson.D{
 			{"$group", bson.D{
 				{"_id", nil},

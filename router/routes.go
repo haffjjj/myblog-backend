@@ -24,10 +24,10 @@ var routes = Routes{
 		"/postsGroups",
 		handler.GetPostsGroups,
 	},
-	// Route{
-	// 	"Get",
-	// 	"GET",
-	// 	"/posts",
-	// 	handler.GetPostGroups,
-	// },
+	Route{
+		"GetPostsGroupsTag",
+		"GET",
+		"/postsGroups/tag/{tag}",
+		handler.GetPostsGroupsTag,
+	},
 }
