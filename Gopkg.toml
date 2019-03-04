@@ -25,18 +25,14 @@
 #   unused-packages = true
 
 
-[[constraint]]
-  name = "github.com/gorilla/mux"
-  version = "1.7.0"
-
 [prune]
   go-tests = true
   unused-packages = true
 
 [[constraint]]
-  name = "github.com/mongodb/mongo-go-driver"
+  name = "go.mongodb.org/mongo-driver"
   version = "0.3.0"
 
 [[constraint]]
-  name = "github.com/rs/cors"
-  version = "1.6.0"
+  name = "github.com/gorilla/mux"
+  version = "1.7.0"

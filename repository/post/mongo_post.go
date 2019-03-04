@@ -1,47 +1,34 @@
-package models
+package post
 
 import (
 	"context"
 	"log"
 
-	"github.com/haffjjj/myblog-api-backend/db/mongo"
+	"github.com/haffjjj/myblog-backend/models"
 	"github.com/mongodb/mongo-go-driver/bson"
+	"github.com/mongodb/mongo-go-driver/mongo"
 )
 
-// Post is struct for model post
-type Post struct {
-	Title       string   `json:"title" bson:"title"`
-	Thumbnail   string   `json:"thumbnail" bson:"thumbnail"`
-	CreatedAt   string   `json:"createdAt" bson:"createdAt"`
-	ReadingTime string   `json:"readingTime" bson:"readingTime"`
-	Tag         []string `json:"tag" bson:"tag"`
-	Content     string   `json:"content" bson:"content"`
+type mongoPostRepository struct {
+	mgoClient *mongo.Client
 }
 
-//PostPagination is struct for post pagination
-type postsGroup struct {
-	Count int    `json:"count" bson:"count"`
-	Data  []Post `json:"data" bson:"data"`
+//NewMongoPostRespository ...
+func NewMongoPostRespository(c *mongo.Client) Repository {
+	return &mongoPostRepository{c}
 }
 
-type GetPostsGroupsFilter struct {
-	Tag string
-}
+func (m *mongoPostRepository) GetGroups() []*models.PostsGroup {
 
-//GetPosts is model for getPosts
-func GetPostsGroups(f GetPostsGroupsFilter) []*postsGroup {
-
-	var client = mongo.MongoSession.Client
-	var collection = client.Database("myblog").Collection("posts")
-
-	var postsGroups []*postsGroup
+	var collection = m.mgoClient.Database("myblog").Collection("posts")
+	var postsGroups []*models.PostsGroup
 
 	//aggregate to get data
 	cur, err := collection.Aggregate(context.TODO(), []bson.D{
 		bson.D{
 			{"$match", bson.D{
 				{"tag", bson.D{
-					{"$regex", f.Tag},
+					{"$regex", ""},
 				}},
 			}},
 		},
@@ -81,7 +68,7 @@ func GetPostsGroups(f GetPostsGroupsFilter) []*postsGroup {
 
 	for cur.Next(context.TODO()) {
 
-		var elem postsGroup
+		var elem models.PostsGroup
 		err := cur.Decode(&elem)
 		if err != nil {
 			log.Fatal(err)
