@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/haffjjj/myblog-backend/models"
+
 	"github.com/gorilla/mux"
 	"github.com/haffjjj/myblog-backend/usecase/post"
 )
@@ -22,8 +24,12 @@ func NewPostHandler(r *mux.Router, p post.Usecase) {
 
 // GetGroups ...
 func (p *PostHandler) GetGroups(w http.ResponseWriter, r *http.Request) {
-	postsGroups := p.pUsecase.GetGroups()
+	postsGroups, err := p.pUsecase.GetGroups()
 
-	result, _ := json.Marshal(postsGroups)
-	w.Write(result)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(models.ResponseError{Message: err.Error()})
+	} else {
+		json.NewEncoder(w).Encode(postsGroups)
+	}
 }

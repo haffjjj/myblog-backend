@@ -23,6 +23,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer mgoClient.Disconnect(context.TODO())
 
 	postRepo := _postRepo.NewMongoPostRespository(mgoClient)
 	postUsecase := _postUsecase.NewPostUsecase(postRepo)

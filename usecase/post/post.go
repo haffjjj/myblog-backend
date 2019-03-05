@@ -16,8 +16,12 @@ func NewPostUsecase(p post.Repository) Usecase {
 	}
 }
 
-func (p *postUsecase) GetGroups() []*models.PostsGroup {
-	postsGroups := p.postRepo.GetGroups()
+func (p *postUsecase) GetGroups() ([]*models.PostsGroup, error) {
+	postsGroups, err := p.postRepo.GetGroups()
 
-	return postsGroups
+	if err != nil {
+		return nil, err
+	}
+
+	return postsGroups, nil
 }

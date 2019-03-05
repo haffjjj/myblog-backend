@@ -2,7 +2,6 @@ package post
 
 import (
 	"context"
-	"log"
 
 	"github.com/haffjjj/myblog-backend/models"
 	"github.com/mongodb/mongo-go-driver/bson"
@@ -18,7 +17,7 @@ func NewMongoPostRespository(c *mongo.Client) Repository {
 	return &mongoPostRepository{c}
 }
 
-func (m *mongoPostRepository) GetGroups() []*models.PostsGroup {
+func (m *mongoPostRepository) GetGroups() ([]*models.PostsGroup, error) {
 
 	var collection = m.mgoClient.Database("myblog").Collection("posts")
 	var postsGroups []*models.PostsGroup
@@ -26,7 +25,7 @@ func (m *mongoPostRepository) GetGroups() []*models.PostsGroup {
 	//aggregate to get data
 	cur, err := collection.Aggregate(context.TODO(), []bson.D{
 		bson.D{
-			{"$match", bson.D{
+			{"$matc", bson.D{
 				{"tag", bson.D{
 					{"$regex", ""},
 				}},
@@ -63,7 +62,7 @@ func (m *mongoPostRepository) GetGroups() []*models.PostsGroup {
 	})
 
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	for cur.Next(context.TODO()) {
@@ -71,16 +70,16 @@ func (m *mongoPostRepository) GetGroups() []*models.PostsGroup {
 		var elem models.PostsGroup
 		err := cur.Decode(&elem)
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 		postsGroups = append(postsGroups, &elem)
 	}
 
 	if err := cur.Err(); err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	cur.Close(context.TODO())
 
-	return postsGroups
+	return postsGroups, nil
 }
