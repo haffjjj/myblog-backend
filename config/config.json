@@ -5,8 +5,7 @@
       "port": ":27017",
       "username": "",
       "password": ""
-    },
-    "mysql": {}
+    }
   },
   "port": ":8081"
 }
