@@ -33,7 +33,7 @@ func main() {
 		port   = viper.GetString("port")
 	)
 
-	mgoClient, err := mongo.Connect(context.TODO(), fmt.Sprint("mongodb://", dbHost, dbPort))
+	mgoClient, err := mongo.Connect(context.TODO(), fmt.Sprint("mongodb://root:root@", dbHost, dbPort))
 	if err != nil {
 		log.Fatal(err)
 	}
