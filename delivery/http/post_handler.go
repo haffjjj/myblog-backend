@@ -1,13 +1,13 @@
 package http
 
 import (
-	"encoding/json"
 	"net/http"
 	"strconv"
 
+	"github.com/labstack/echo"
+
 	"github.com/haffjjj/myblog-backend/models"
 
-	"github.com/gorilla/mux"
 	"github.com/haffjjj/myblog-backend/usecase/post"
 )
 
@@ -17,65 +17,66 @@ type PostHandler struct {
 }
 
 //NewPostHandler ...
-func NewPostHandler(r *mux.Router, p post.Usecase) {
+func NewPostHandler(e *echo.Echo, p post.Usecase) {
 	handler := &PostHandler{p}
-
-	r.HandleFunc("/postsGroups", handler.GetGroups).Queries("start", "{start}", "limit", "{limit}").Methods("GET")
-	r.HandleFunc("/postsGroups", handler.GetGroups).Methods("GET")
-
-	r.HandleFunc("/postsGroups/tag/{tag}", handler.GetGroupsByTag).Queries("start", "{start}", "limit", "{limit}").Methods("GET")
-	r.HandleFunc("/postsGroups/tag/{tag}", handler.GetGroupsByTag).Methods("GET")
-
+	e.GET("/postsGroups", handler.GetGroups)
+	e.GET("/postsGroups/tag/:tag", handler.GetGroupsByTag)
 }
 
 // GetGroups ...
-func (p *PostHandler) GetGroups(w http.ResponseWriter, r *http.Request) {
+func (p *PostHandler) GetGroups(e echo.Context) error {
 
 	pagination := models.Pagination{Start: 0, Limit: 100}
 
-	if startP, ok := mux.Vars(r)["start"]; ok {
-		startP, _ := strconv.Atoi(startP)
-		pagination.Start = startP
+	if startP, ok := e.QueryParams()["start"]; ok {
+		start, err := strconv.Atoi(startP[0])
+		if err != nil {
+			return e.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
+		}
+		pagination.Start = start
 	}
 
-	if limitP, ok := mux.Vars(r)["limit"]; ok {
-		limitP, _ := strconv.Atoi(limitP)
-		pagination.Limit = limitP
+	if limitP, ok := e.QueryParams()["limit"]; ok {
+		limit, err := strconv.Atoi(limitP[0])
+		if err != nil {
+			return e.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
+		}
+		pagination.Limit = limit
 	}
 
 	postsGroups, err := p.pUsecase.GetGroups(pagination)
-
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(models.ResponseError{Message: err.Error()})
-	} else {
-		json.NewEncoder(w).Encode(postsGroups)
+		return e.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
 	}
+	return e.JSON(http.StatusOK, postsGroups)
 }
 
 //GetGroupsByTag ...
-func (p *PostHandler) GetGroupsByTag(w http.ResponseWriter, r *http.Request) {
+func (p *PostHandler) GetGroupsByTag(e echo.Context) error {
 
-	tag := mux.Vars(r)["tag"]
+	tag := e.Param("tag")
 
 	pagination := models.Pagination{Start: 0, Limit: 100}
 
-	if startP, ok := mux.Vars(r)["start"]; ok {
-		startP, _ := strconv.Atoi(startP)
-		pagination.Start = startP
+	if startP, ok := e.QueryParams()["start"]; ok {
+		start, err := strconv.Atoi(startP[0])
+		if err != nil {
+			return e.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
+		}
+		pagination.Start = start
 	}
 
-	if limitP, ok := mux.Vars(r)["limit"]; ok {
-		limitP, _ := strconv.Atoi(limitP)
-		pagination.Limit = limitP
+	if limitP, ok := e.QueryParams()["limit"]; ok {
+		limit, err := strconv.Atoi(limitP[0])
+		if err != nil {
+			return e.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
+		}
+		pagination.Limit = limit
 	}
 
 	postsGroups, err := p.pUsecase.GetGroupsByTag(tag, pagination)
-
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(models.ResponseError{Message: err.Error()})
-	} else {
-		json.NewEncoder(w).Encode(postsGroups)
+		return e.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
 	}
+	return e.JSON(http.StatusOK, postsGroups)
 }
