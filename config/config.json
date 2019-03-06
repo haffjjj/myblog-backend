@@ -1,11 +1,11 @@
 {
   "database": {
     "mongodb": {
-      "host": "localhost",
+      "host": "mongodb",
       "port": ":27017",
       "username": "",
       "password": ""
     }
   },
-  "port": ":8081"
+  "port": ":80"
 }
