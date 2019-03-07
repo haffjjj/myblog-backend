@@ -8,6 +8,6 @@ WORKDIR /go/src/github.com/haffjjj/myblog-backend
 
 COPY . .
 
-EXPOSE 80
+EXPOSE 9000
 
 CMD make run
