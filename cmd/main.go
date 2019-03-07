@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/labstack/echo/middleware"
+
 	_postRepo "github.com/haffjjj/myblog-backend/repository/post"
 	_postUsecase "github.com/haffjjj/myblog-backend/usecase/post"
 	"github.com/labstack/echo"
@@ -49,6 +51,9 @@ func main() {
 	postUsecase := _postUsecase.NewPostUsecase(postRepo)
 
 	e := echo.New()
+
+	e.Use(middleware.CORS())
+
 	_httpDelivery.NewPostHandler(e, postUsecase)
 
 	e.Logger.Fatal(e.Start(port))
