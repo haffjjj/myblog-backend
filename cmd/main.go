@@ -28,12 +28,14 @@ func init() {
 func main() {
 
 	var (
-		dbHost = viper.GetString("database.mongodb.host")
-		dbPort = viper.GetString("database.mongodb.port")
-		port   = viper.GetString("port")
+		dbHost  = viper.GetString("database.mongodb.host")
+		dbPort  = viper.GetString("database.mongodb.port")
+		dbUName = viper.GetString("database.mongodb.username")
+		dbPass  = viper.GetString("database.mongodb.password")
+		port    = viper.GetString("port")
 	)
 
-	mgoClient, err := mongo.Connect(context.TODO(), fmt.Sprint("mongodb://root:root@", dbHost, dbPort))
+	mgoClient, err := mongo.Connect(context.TODO(), fmt.Sprint("mongodb://", dbUName, ":", dbPass, "@", dbHost, dbPort))
 	if err != nil {
 		log.Fatal(err)
 	}
