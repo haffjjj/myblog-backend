@@ -8,7 +8,10 @@ import (
 	"github.com/labstack/echo/middleware"
 
 	_postRepo "github.com/haffjjj/myblog-backend/repository/post"
+	_tagRepo "github.com/haffjjj/myblog-backend/repository/tag"
 	_postUsecase "github.com/haffjjj/myblog-backend/usecase/post"
+	_tagUsecase "github.com/haffjjj/myblog-backend/usecase/tag"
+
 	"github.com/labstack/echo"
 	"github.com/spf13/viper"
 
@@ -47,14 +50,17 @@ func main() {
 	}
 	defer mgoClient.Disconnect(context.TODO())
 
+	e := echo.New()
+	e.Use(middleware.CORS())
+
 	postRepo := _postRepo.NewMongoPostRespository(mgoClient)
 	postUsecase := _postUsecase.NewPostUsecase(postRepo)
 
-	e := echo.New()
-
-	e.Use(middleware.CORS())
+	tagRepo := _tagRepo.NewMongoTagRespository(mgoClient)
+	tagUsecase := _tagUsecase.NewTagUsecase(tagRepo)
 
 	_httpDelivery.NewPostHandler(e, postUsecase)
+	_httpDelivery.NewTagHandler(e, tagUsecase)
 
 	e.Logger.Fatal(e.Start(port))
 }
