@@ -16,6 +16,17 @@ func NewPostUsecase(p post.Repository) Usecase {
 	}
 }
 
+//GetById ...
+func (pU *postUsecase) GetByID(i string) (*models.Post, error) {
+	post, err := pU.postRepo.GetByID(i)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return post, nil
+}
+
 func (pU *postUsecase) GetGroups(p models.Pagination) ([]*models.PostsGroup, error) {
 	postsGroups, err := pU.postRepo.GetGroups(p)
 

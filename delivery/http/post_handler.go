@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -19,8 +20,20 @@ type PostHandler struct {
 //NewPostHandler ...
 func NewPostHandler(e *echo.Echo, p post.Usecase) {
 	handler := &PostHandler{p}
+	e.GET("/posts/:id", handler.GetByID)
 	e.GET("/postsGroups", handler.GetGroups)
 	e.GET("/postsGroups/tag/:tag", handler.GetGroupsByTag)
+}
+
+//GetByID ...
+func (p *PostHandler) GetByID(e echo.Context) error {
+	post, err := p.pUsecase.GetByID("5c76c0295726e2ee4c24552c")
+
+	if err != nil {
+		return e.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
+	}
+
+	return e.JSON(http.StatusOK, post)
 }
 
 // GetGroups ...
@@ -31,6 +44,7 @@ func (p *PostHandler) GetGroups(e echo.Context) error {
 	if startP, ok := e.QueryParams()["start"]; ok {
 		start, err := strconv.Atoi(startP[0])
 		if err != nil {
+			fmt.Println(err)
 			return e.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
 		}
 		pagination.Start = start

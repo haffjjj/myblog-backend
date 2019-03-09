@@ -5,6 +5,7 @@ import (
 
 	"github.com/haffjjj/myblog-backend/models"
 	"github.com/mongodb/mongo-go-driver/bson"
+	"github.com/mongodb/mongo-go-driver/bson/primitive"
 	"github.com/mongodb/mongo-go-driver/mongo"
 )
 
@@ -15,6 +16,26 @@ type mongoPostRepository struct {
 //NewMongoPostRespository ...
 func NewMongoPostRespository(c *mongo.Client) Repository {
 	return &mongoPostRepository{c}
+}
+
+//GetById ...
+func (m *mongoPostRepository) GetByID(i string) (*models.Post, error) {
+	var collection = m.mgoClient.Database("myblog").Collection("posts")
+
+	var post models.Post
+
+	IDHex, err := primitive.ObjectIDFromHex(i)
+	if err != nil {
+		return nil, err
+	}
+
+	err = collection.FindOne(context.TODO(), bson.D{{"_id", IDHex}}).Decode(&post)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &post, nil
 }
 
 func (m *mongoPostRepository) GetGroups(p models.Pagination) ([]*models.PostsGroup, error) {
