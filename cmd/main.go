@@ -59,6 +59,7 @@ func main() {
 	tagRepo := _tagRepo.NewMongoTagRespository(mgoClient)
 	tagUsecase := _tagUsecase.NewTagUsecase(tagRepo)
 
+	_httpDelivery.NewAuthHandler(e)
 	_httpDelivery.NewPostHandler(e, postUsecase)
 	_httpDelivery.NewTagHandler(e, tagUsecase)
 

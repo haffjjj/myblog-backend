@@ -18,11 +18,20 @@ type PostHandler struct {
 }
 
 //NewPostHandler ...
-func NewPostHandler(e *echo.Echo, p post.Usecase) {
-	handler := &PostHandler{p}
-	e.GET("/posts/:id", handler.GetByID)
-	e.GET("/postsGroups", handler.GetGroups)
-	e.GET("/postsGroups/tag/:tag", handler.GetGroupsByTag)
+func NewPostHandler(e *echo.Echo, pU post.Usecase) {
+	handler := &PostHandler{pU}
+	middleware := &Middleware{}
+
+	p := e.Group("/posts")
+	p.Use(middleware.JWTAuth())
+
+	p.GET("/:id", handler.GetByID)
+
+	pG := e.Group("/postsGroups")
+	pG.Use(middleware.JWTAuth())
+
+	pG.GET("", handler.GetGroups)
+	pG.GET("/tag/:tag", handler.GetGroupsByTag)
 }
 
 //GetByID ...

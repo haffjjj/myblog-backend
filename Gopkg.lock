@@ -285,9 +285,11 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/dgrijalva/jwt-go",
     "github.com/labstack/echo",
     "github.com/labstack/echo/middleware",
     "github.com/mongodb/mongo-go-driver/bson",
+    "github.com/mongodb/mongo-go-driver/bson/primitive",
     "github.com/mongodb/mongo-go-driver/mongo",
     "github.com/spf13/viper",
   ]

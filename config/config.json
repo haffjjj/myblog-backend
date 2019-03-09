@@ -7,5 +7,6 @@
       "password": ""
     }
   },
+  "jwtSecret": "RfEAsQLOMCriHVKxovDAFk2LdYr0rSFJE5nOjC3xUTofDHprukQ8YNIJGJAPf27",
   "port": ":9000"
 }
