@@ -27,7 +27,10 @@ func NewPostHandler(e *echo.Echo, p post.Usecase) {
 
 //GetByID ...
 func (p *PostHandler) GetByID(e echo.Context) error {
-	post, err := p.pUsecase.GetByID("5c76c0295726e2ee4c24552c")
+
+	idP := e.Param("id")
+
+	post, err := p.pUsecase.GetByID(idP)
 
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
