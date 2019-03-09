@@ -50,8 +50,8 @@ func main() {
 	}
 	defer mgoClient.Disconnect(context.TODO())
 
-	e := echo.New()
-	e.Use(middleware.CORS())
+	c := echo.New()
+	c.Use(middleware.CORS())
 
 	postRepo := _postRepo.NewMongoPostRespository(mgoClient)
 	postUsecase := _postUsecase.NewPostUsecase(postRepo)
@@ -59,9 +59,9 @@ func main() {
 	tagRepo := _tagRepo.NewMongoTagRespository(mgoClient)
 	tagUsecase := _tagUsecase.NewTagUsecase(tagRepo)
 
-	_httpDelivery.NewAuthHandler(e)
-	_httpDelivery.NewPostHandler(e, postUsecase)
-	_httpDelivery.NewTagHandler(e, tagUsecase)
+	_httpDelivery.NewAuthHandler(c)
+	_httpDelivery.NewPostHandler(c, postUsecase)
+	_httpDelivery.NewTagHandler(c, tagUsecase)
 
-	e.Logger.Fatal(e.Start(port))
+	e.Logger.Fatal(c.Start(port))
 }

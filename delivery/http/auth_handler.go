@@ -14,9 +14,9 @@ import (
 type AuthHandler struct{}
 
 //NewAuthHandler ...
-func NewAuthHandler(e *echo.Echo) {
+func NewAuthHandler(c *echo.Echo) {
 	handler := &AuthHandler{}
-	e.POST("/auth", handler.Auth)
+	c.POST("/auth", handler.Auth)
 }
 
 //Auth ...

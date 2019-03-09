@@ -16,10 +16,10 @@ type TagHandler struct {
 //NewTagHandler ...
 func NewTagHandler(e *echo.Echo, tU tag.Usecase) {
 	handler := &TagHandler{tU}
-	middleware := &Middleware{}
+	// middleware := &Middleware{}
 
 	t := e.Group("/tags")
-	t.Use(middleware.JWTAuth())
+	// t.Use(middleware.JWTAuth())
 
 	t.GET("", handler.Get)
 }
