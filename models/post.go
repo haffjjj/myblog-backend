@@ -2,8 +2,8 @@ package models
 
 // Post is struct for model post
 type Post struct {
-	Title       string   `json:"title" bson:"title"`
-	Thumbnail   string   `json:"thumbnail" bson:"thumbnail"`
+	Title       string   `json:"title" bson:"title" validate:"lte=5"`
+	Thumbnail   string   `json:"thumbnail" bson:"thumbnail" validate:"required"`
 	CreatedAt   string   `json:"createdAt" bson:"createdAt"`
 	ReadingTime string   `json:"readingTime" bson:"readingTime"`
 	Tag         []string `json:"tag" bson:"tag"`

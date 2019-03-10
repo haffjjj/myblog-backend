@@ -26,6 +26,7 @@ func NewPostHandler(c *echo.Echo, pU post.Usecase) {
 	// p.Use(middleware.JWTAuth())
 
 	g.GET("/:id", handler.GetByID)
+	g.POST("", handler.Store)
 
 	gG := c.Group("/postsGroups")
 	// pG.Use(middleware.JWTAuth())
@@ -35,10 +36,10 @@ func NewPostHandler(c *echo.Echo, pU post.Usecase) {
 }
 
 //GetByID ...
-func (p *PostHandler) GetByID(c echo.Context) error {
+func (pH *PostHandler) GetByID(c echo.Context) error {
 	idP := c.Param("id")
 
-	post, err := p.pUsecase.GetByID(idP)
+	post, err := pH.pUsecase.GetByID(idP)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
@@ -47,8 +48,20 @@ func (p *PostHandler) GetByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, post)
 }
 
+//Store ...
+func (pH *PostHandler) Store(c echo.Context) error {
+	var p models.Post
+	c.Bind(&p)
+
+	err := c.Validate(p)
+
+	fmt.Println(err)
+
+	return c.JSON(http.StatusOK, "test")
+}
+
 // GetGroups ...
-func (p *PostHandler) GetGroups(c echo.Context) error {
+func (pH *PostHandler) GetGroups(c echo.Context) error {
 
 	pagination := models.Pagination{Start: 0, Limit: 100}
 
@@ -69,7 +82,7 @@ func (p *PostHandler) GetGroups(c echo.Context) error {
 		pagination.Limit = limit
 	}
 
-	postsGroups, err := p.pUsecase.GetGroups(pagination)
+	postsGroups, err := pH.pUsecase.GetGroups(pagination)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
 	}
@@ -77,7 +90,7 @@ func (p *PostHandler) GetGroups(c echo.Context) error {
 }
 
 //GetGroupsByTag ...
-func (p *PostHandler) GetGroupsByTag(c echo.Context) error {
+func (pH *PostHandler) GetGroupsByTag(c echo.Context) error {
 
 	tag := c.Param("tag")
 
@@ -99,7 +112,7 @@ func (p *PostHandler) GetGroupsByTag(c echo.Context) error {
 		pagination.Limit = limit
 	}
 
-	postsGroups, err := p.pUsecase.GetGroupsByTag(tag, pagination)
+	postsGroups, err := pH.pUsecase.GetGroupsByTag(tag, pagination)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
 	}

@@ -5,12 +5,15 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/go-playground/validator"
 	"github.com/labstack/echo/middleware"
 
 	_postRepo "github.com/haffjjj/myblog-backend/repository/post"
 	_tagRepo "github.com/haffjjj/myblog-backend/repository/tag"
 	_postUsecase "github.com/haffjjj/myblog-backend/usecase/post"
 	_tagUsecase "github.com/haffjjj/myblog-backend/usecase/tag"
+
+	"github.com/haffjjj/myblog-backend/utils"
 
 	"github.com/labstack/echo"
 	"github.com/spf13/viper"
@@ -50,8 +53,13 @@ func main() {
 	}
 	defer mgoClient.Disconnect(context.TODO())
 
-	c := echo.New()
-	c.Use(middleware.CORS())
+	// ===========
+
+	e := echo.New()
+	e.Use(middleware.CORS())
+	e.Validator = &utils.Validator{Validator: validator.New()}
+
+	// ===========
 
 	postRepo := _postRepo.NewMongoPostRespository(mgoClient)
 	postUsecase := _postUsecase.NewPostUsecase(postRepo)
@@ -59,9 +67,11 @@ func main() {
 	tagRepo := _tagRepo.NewMongoTagRespository(mgoClient)
 	tagUsecase := _tagUsecase.NewTagUsecase(tagRepo)
 
-	_httpDelivery.NewAuthHandler(c)
-	_httpDelivery.NewPostHandler(c, postUsecase)
-	_httpDelivery.NewTagHandler(c, tagUsecase)
+	_httpDelivery.NewAuthHandler(e)
+	_httpDelivery.NewPostHandler(e, postUsecase)
+	_httpDelivery.NewTagHandler(e, tagUsecase)
 
-	e.Logger.Fatal(c.Start(port))
+	// ===========
+
+	e.Logger.Fatal(e.Start(port))
 }
