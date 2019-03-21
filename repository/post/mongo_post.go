@@ -18,9 +18,26 @@ func NewMongoPostRespository(c *mongo.Client) Repository {
 	return &mongoPostRepository{c}
 }
 
+//Delete ...
+func (m *mongoPostRepository) Delete(i string) error {
+	collection := m.mgoClient.Database("myblog").Collection("posts")
+
+	IDHex, err := primitive.ObjectIDFromHex(i)
+	if err != nil {
+		return err
+	}
+
+	_, err = collection.DeleteOne(context.TODO(), bson.D{{"_id", IDHex}})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 //Store ...
 func (m *mongoPostRepository) Store(p *models.Post) error {
-	var collection = m.mgoClient.Database("myblog").Collection("posts")
+	collection := m.mgoClient.Database("myblog").Collection("posts")
 
 	_, err := collection.InsertOne(context.TODO(), p)
 	if err != nil {
@@ -32,7 +49,7 @@ func (m *mongoPostRepository) Store(p *models.Post) error {
 
 //GetById ...
 func (m *mongoPostRepository) GetByID(i string) (*models.Post, error) {
-	var collection = m.mgoClient.Database("myblog").Collection("posts")
+	collection := m.mgoClient.Database("myblog").Collection("posts")
 
 	var post models.Post
 
@@ -52,7 +69,7 @@ func (m *mongoPostRepository) GetByID(i string) (*models.Post, error) {
 
 func (m *mongoPostRepository) GetGroups(p models.Pagination) ([]*models.PostsGroup, error) {
 
-	var collection = m.mgoClient.Database("myblog").Collection("posts")
+	collection := m.mgoClient.Database("myblog").Collection("posts")
 	var postsGroups []*models.PostsGroup
 
 	//aggregate to get data
@@ -122,7 +139,7 @@ func (m *mongoPostRepository) GetGroups(p models.Pagination) ([]*models.PostsGro
 
 func (m *mongoPostRepository) GetGroupsByTag(t string, p models.Pagination) ([]*models.PostsGroup, error) {
 
-	var collection = m.mgoClient.Database("myblog").Collection("posts")
+	collection := m.mgoClient.Database("myblog").Collection("posts")
 	var postsGroups []*models.PostsGroup
 
 	//aggregate to get data

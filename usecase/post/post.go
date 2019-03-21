@@ -16,8 +16,17 @@ func NewPostUsecase(p post.Repository) Usecase {
 	}
 }
 
-func (pU *postUsecase) Store(p *models.Post) error {
+//Delete ...
+func (pU *postUsecase) Delete(i string) error {
+	err := pU.postRepo.Delete(i)
+	if err != nil {
+		return err
+	}
 
+	return nil
+}
+
+func (pU *postUsecase) Store(p *models.Post) error {
 	err := pU.postRepo.Store(p)
 	if err != nil {
 		return err

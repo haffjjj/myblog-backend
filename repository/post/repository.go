@@ -8,4 +8,5 @@ type Repository interface {
 	GetGroups(p models.Pagination) ([]*models.PostsGroup, error)
 	GetGroupsByTag(t string, p models.Pagination) ([]*models.PostsGroup, error)
 	Store(p *models.Post) error
+	Delete(i string) error
 }

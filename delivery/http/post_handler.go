@@ -27,6 +27,7 @@ func NewPostHandler(c *echo.Echo, pU post.Usecase) {
 
 	g.GET("/:id", handler.GetByID)
 	g.POST("", handler.Store)
+	g.DELETE("/:id", handler.Delete)
 
 	gG := c.Group("/postsGroups")
 	// pG.Use(middleware.JWTAuth())
@@ -35,17 +36,17 @@ func NewPostHandler(c *echo.Echo, pU post.Usecase) {
 	gG.GET("/tag/:tag", handler.GetGroupsByTag)
 }
 
-//GetByID ...
-func (pH *PostHandler) GetByID(c echo.Context) error {
+//Delete ...
+func (pH *PostHandler) Delete(c echo.Context) error {
 	idP := c.Param("id")
 
-	post, err := pH.pUsecase.GetByID(idP)
+	err := pH.pUsecase.Delete(idP)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
 	}
 
-	return c.JSON(http.StatusOK, post)
+	return c.JSON(http.StatusNoContent, "")
 }
 
 //Store ...
@@ -63,7 +64,20 @@ func (pH *PostHandler) Store(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
 	}
 
-	return c.JSON(http.StatusOK, &p)
+	return c.JSON(http.StatusCreated, &p)
+}
+
+//GetByID ...
+func (pH *PostHandler) GetByID(c echo.Context) error {
+	idP := c.Param("id")
+
+	post, err := pH.pUsecase.GetByID(idP)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, post)
 }
 
 // GetGroups ...
