@@ -54,10 +54,16 @@ func (pH *PostHandler) Store(c echo.Context) error {
 	c.Bind(&p)
 
 	err := c.Validate(p)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, models.ResponseError{Message: "Error validation"})
+	}
 
-	fmt.Println(err)
+	err = pH.pUsecase.Store(&p)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
+	}
 
-	return c.JSON(http.StatusOK, "test")
+	return c.JSON(http.StatusOK, &p)
 }
 
 // GetGroups ...

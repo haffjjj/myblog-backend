@@ -16,6 +16,16 @@ func NewPostUsecase(p post.Repository) Usecase {
 	}
 }
 
+func (pU *postUsecase) Store(p *models.Post) error {
+
+	err := pU.postRepo.Store(p)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 //GetById ...
 func (pU *postUsecase) GetByID(i string) (*models.Post, error) {
 	post, err := pU.postRepo.GetByID(i)

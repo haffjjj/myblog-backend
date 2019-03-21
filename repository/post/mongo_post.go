@@ -18,6 +18,18 @@ func NewMongoPostRespository(c *mongo.Client) Repository {
 	return &mongoPostRepository{c}
 }
 
+//Store ...
+func (m *mongoPostRepository) Store(p *models.Post) error {
+	var collection = m.mgoClient.Database("myblog").Collection("posts")
+
+	_, err := collection.InsertOne(context.TODO(), p)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 //GetById ...
 func (m *mongoPostRepository) GetByID(i string) (*models.Post, error) {
 	var collection = m.mgoClient.Database("myblog").Collection("posts")
