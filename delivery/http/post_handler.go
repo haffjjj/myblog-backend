@@ -28,12 +28,33 @@ func NewPostHandler(c *echo.Echo, pU post.Usecase) {
 	g.GET("/:id", handler.GetByID)
 	g.POST("", handler.Store)
 	g.DELETE("/:id", handler.Delete)
+	g.PUT("/:id", handler.Update)
 
 	gG := c.Group("/postsGroups")
 	// pG.Use(middleware.JWTAuth())
 
 	gG.GET("", handler.GetGroups)
 	gG.GET("/tag/:tag", handler.GetGroupsByTag)
+}
+
+//Update ...
+func (pH *PostHandler) Update(c echo.Context) error {
+	idP := c.Param("id")
+
+	var p models.Post
+	c.Bind(&p)
+
+	err := c.Validate(p)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, models.ResponseError{Message: "Error validation"})
+	}
+
+	err = pH.pUsecase.Update(idP, &p)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
+	}
+
+	return c.JSON(http.StatusNoContent, "")
 }
 
 //Delete ...

@@ -2,6 +2,7 @@ package post
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/haffjjj/myblog-backend/models"
 	"github.com/mongodb/mongo-go-driver/bson"
@@ -16,6 +17,25 @@ type mongoPostRepository struct {
 //NewMongoPostRespository ...
 func NewMongoPostRespository(c *mongo.Client) Repository {
 	return &mongoPostRepository{c}
+}
+
+func (m *mongoPostRepository) Update(i string, p *models.Post) error {
+	collection := m.mgoClient.Database("myblog").Collection("posts")
+
+	IDHex, err := primitive.ObjectIDFromHex(i)
+	if err != nil {
+		return err
+	}
+
+	// fmt.Println(IDHex)
+
+	_, err = collection.ReplaceOne(context.TODO(), bson.D{{"_id", IDHex}}, p)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	return nil
 }
 
 //Delete ...
