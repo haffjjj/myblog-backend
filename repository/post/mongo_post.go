@@ -27,8 +27,6 @@ func (m *mongoPostRepository) Update(i string, p *models.Post) error {
 		return err
 	}
 
-	// fmt.Println(IDHex)
-
 	_, err = collection.ReplaceOne(context.TODO(), bson.D{{"_id", IDHex}}, p)
 	if err != nil {
 		fmt.Println(err)
