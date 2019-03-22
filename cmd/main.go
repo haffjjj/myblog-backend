@@ -10,6 +10,8 @@ import (
 
 	_postRepo "github.com/haffjjj/myblog-backend/repository/post"
 	_tagRepo "github.com/haffjjj/myblog-backend/repository/tag"
+	_userRepo "github.com/haffjjj/myblog-backend/repository/user"
+	_authUsecase "github.com/haffjjj/myblog-backend/usecase/auth"
 	_postUsecase "github.com/haffjjj/myblog-backend/usecase/post"
 	_tagUsecase "github.com/haffjjj/myblog-backend/usecase/tag"
 
@@ -62,12 +64,14 @@ func main() {
 	// ===========
 
 	postRepo := _postRepo.NewMongoPostRespository(mgoClient)
-	postUsecase := _postUsecase.NewPostUsecase(postRepo)
-
 	tagRepo := _tagRepo.NewMongoTagRespository(mgoClient)
-	tagUsecase := _tagUsecase.NewTagUsecase(tagRepo)
+	userRepo := _userRepo.NewMongoUserRespository(mgoClient)
 
-	_httpDelivery.NewAuthHandler(e)
+	postUsecase := _postUsecase.NewPostUsecase(postRepo)
+	tagUsecase := _tagUsecase.NewTagUsecase(tagRepo)
+	authUsecase := _authUsecase.NewAuthUsecase(userRepo)
+
+	_httpDelivery.NewAuthHandler(e, authUsecase)
 	_httpDelivery.NewPostHandler(e, postUsecase)
 	_httpDelivery.NewTagHandler(e, tagUsecase)
 

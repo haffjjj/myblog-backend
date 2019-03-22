@@ -267,11 +267,13 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:ae90f4a0fa8a61c656a54c08aedbabfa79973d3d2151573a2c5d0bafd688cf7d"
+  digest = "1:f33af64a15fdaf1b5d80dfb7dc386854df0187e05cdeb2359dd268e150f3d2be"
   name = "golang.org/x/crypto"
   packages = [
     "acme",
     "acme/autocert",
+    "bcrypt",
+    "blowfish",
     "pbkdf2",
   ]
   pruneopts = "UT"
@@ -328,6 +330,7 @@
     "github.com/mongodb/mongo-go-driver/bson/primitive",
     "github.com/mongodb/mongo-go-driver/mongo",
     "github.com/spf13/viper",
+    "golang.org/x/crypto/bcrypt",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
