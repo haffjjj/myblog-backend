@@ -8,16 +8,16 @@ import (
 	"github.com/mongodb/mongo-go-driver/mongo"
 )
 
-type mongoTagRepository struct {
+type mongoUserRepository struct {
 	mgoClient *mongo.Client
 }
 
-//NewMongoUserRespository ...
+//NewMongoUserRespository  represent initialitation mongoUserRepository
 func NewMongoUserRespository(c *mongo.Client) Repository {
-	return &mongoTagRepository{c}
+	return &mongoUserRepository{c}
 }
 
-func (m *mongoTagRepository) GetByUsername(u string) (*models.User, error) {
+func (m *mongoUserRepository) GetByUsername(u string) (*models.User, error) {
 	collection := m.mgoClient.Database("myblog").Collection("users")
 
 	var user models.User

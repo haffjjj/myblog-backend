@@ -9,7 +9,7 @@ type tagUsecase struct {
 	tagRepo tag.Repository
 }
 
-//NewTagUsecase ...
+//NewTagUsecase represent initialitation tagusecase
 func NewTagUsecase(t tag.Repository) Usecase {
 	return &tagUsecase{
 		tagRepo: t,

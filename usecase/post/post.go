@@ -9,7 +9,7 @@ type postUsecase struct {
 	postRepo post.Repository
 }
 
-//NewPostUsecase ...
+//NewPostUsecase represent initialitation postusecase
 func NewPostUsecase(p post.Repository) Usecase {
 	return &postUsecase{
 		postRepo: p,

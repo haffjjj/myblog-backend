@@ -2,7 +2,7 @@ package post
 
 import "github.com/haffjjj/myblog-backend/models"
 
-// Repository interface represent post repository contract
+// Repository represent post repository contract
 type Repository interface {
 	GetByID(i string) (*models.Post, error)
 	GetGroups(p models.Pagination) ([]*models.PostsGroup, error)

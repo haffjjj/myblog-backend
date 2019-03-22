@@ -14,7 +14,7 @@ type mongoPostRepository struct {
 	mgoClient *mongo.Client
 }
 
-//NewMongoPostRespository ...
+//NewMongoPostRespository represent initialitation mongoPostRepository
 func NewMongoPostRespository(c *mongo.Client) Repository {
 	return &mongoPostRepository{c}
 }
@@ -36,7 +36,6 @@ func (m *mongoPostRepository) Update(i string, p *models.Post) error {
 	return nil
 }
 
-//Delete ...
 func (m *mongoPostRepository) Delete(i string) error {
 	collection := m.mgoClient.Database("myblog").Collection("posts")
 
@@ -53,7 +52,6 @@ func (m *mongoPostRepository) Delete(i string) error {
 	return nil
 }
 
-//Store ...
 func (m *mongoPostRepository) Store(p *models.Post) error {
 	collection := m.mgoClient.Database("myblog").Collection("posts")
 
@@ -65,7 +63,6 @@ func (m *mongoPostRepository) Store(p *models.Post) error {
 	return nil
 }
 
-//GetById ...
 func (m *mongoPostRepository) GetByID(i string) (*models.Post, error) {
 	collection := m.mgoClient.Database("myblog").Collection("posts")
 
@@ -90,7 +87,6 @@ func (m *mongoPostRepository) GetGroups(p models.Pagination) ([]*models.PostsGro
 	collection := m.mgoClient.Database("myblog").Collection("posts")
 	var postsGroups []*models.PostsGroup
 
-	//aggregate to get data
 	cur, err := collection.Aggregate(context.TODO(), mongo.Pipeline{
 		bson.D{
 			{"$group", bson.D{
@@ -160,7 +156,6 @@ func (m *mongoPostRepository) GetGroupsByTag(t string, p models.Pagination) ([]*
 	collection := m.mgoClient.Database("myblog").Collection("posts")
 	var postsGroups []*models.PostsGroup
 
-	//aggregate to get data
 	cur, err := collection.Aggregate(context.TODO(), mongo.Pipeline{
 		bson.D{
 			{"$match", bson.D{

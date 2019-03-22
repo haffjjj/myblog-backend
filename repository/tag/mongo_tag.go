@@ -12,7 +12,7 @@ type mongoTagRepository struct {
 	mgoClient *mongo.Client
 }
 
-//NewMongoTagRespository ...
+//NewMongoTagRespository represent initialitation mongoTagRepository
 func NewMongoTagRespository(c *mongo.Client) Repository {
 	return &mongoTagRepository{c}
 }
@@ -21,7 +21,6 @@ func (m *mongoTagRepository) Get() ([]*models.Tag, error) {
 	var collection = m.mgoClient.Database("myblog").Collection("posts")
 	var tags []*models.Tag
 
-	//aggregate to get data
 	cur, err := collection.Aggregate(context.TODO(), mongo.Pipeline{
 		bson.D{
 			{"$unwind", "$tag"},

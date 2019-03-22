@@ -12,7 +12,7 @@ type authUsecase struct {
 	userRepo user.Repository
 }
 
-//NewAuthUsecase ...
+//NewAuthUsecase represent initialitation authusecase
 func NewAuthUsecase(u user.Repository) Usecase {
 	return &authUsecase{
 		userRepo: u,

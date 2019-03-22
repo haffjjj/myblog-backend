@@ -2,7 +2,7 @@ package tag
 
 import "github.com/haffjjj/myblog-backend/models"
 
-//Usecase ...
+//Usecase represent tag usecase contract
 type Usecase interface {
 	Get() ([]*models.Tag, error)
 }
