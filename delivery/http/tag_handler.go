@@ -8,23 +8,21 @@ import (
 	"github.com/labstack/echo"
 )
 
-//TagHandler ...
+//TagHandler represent handler for tag
 type TagHandler struct {
 	tUsecase tag.Usecase
 }
 
-//NewTagHandler ...
+//NewTagHandler represent initalitation taghandler
 func NewTagHandler(e *echo.Echo, tU tag.Usecase) {
 	handler := &TagHandler{tU}
-	// middleware := &Middleware{}
 
 	t := e.Group("/tags")
-	// t.Use(middleware.JWTAuth())
 
 	t.GET("", handler.Get)
 }
 
-//Get ...
+//Get is method from taghandler
 func (t *TagHandler) Get(e echo.Context) error {
 	tags, err := t.tUsecase.Get()
 	if err != nil {

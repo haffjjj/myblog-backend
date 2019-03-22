@@ -6,10 +6,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-//Middleware ...
+//Middleware represent middleware struct
 type Middleware struct{}
 
-//JWTAuth ...
+//JWTAuth is method from middleware
 func (m *Middleware) JWTAuth() echo.MiddlewareFunc {
 	secret := viper.GetString("jwtSecret")
 

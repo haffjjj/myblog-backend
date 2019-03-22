@@ -12,32 +12,32 @@ import (
 	"github.com/haffjjj/myblog-backend/usecase/post"
 )
 
-//PostHandler ...
+//PostHandler represent handler for post
 type PostHandler struct {
 	pUsecase post.Usecase
 }
 
-//NewPostHandler ...
+//NewPostHandler represent initalitation posthandler
 func NewPostHandler(c *echo.Echo, pU post.Usecase) {
 	handler := &PostHandler{pU}
-	// middleware := &Middleware{}
+	middleware := &Middleware{}
 
 	g := c.Group("/posts")
-	// p.Use(middleware.JWTAuth())
+	gAuth := g.Group("")
+	gAuth.Use(middleware.JWTAuth())
 
 	g.GET("/:id", handler.GetByID)
-	g.POST("", handler.Store)
-	g.DELETE("/:id", handler.Delete)
-	g.PUT("/:id", handler.Update)
+	gAuth.POST("", handler.Store)
+	gAuth.DELETE("/:id", handler.Delete)
+	gAuth.PUT("/:id", handler.Update)
 
 	gG := c.Group("/postsGroups")
-	// pG.Use(middleware.JWTAuth())
 
 	gG.GET("", handler.GetGroups)
 	gG.GET("/tag/:tag", handler.GetGroupsByTag)
 }
 
-//Update ...
+//Update is method from posthandler
 func (pH *PostHandler) Update(c echo.Context) error {
 	idP := c.Param("id")
 
@@ -57,7 +57,7 @@ func (pH *PostHandler) Update(c echo.Context) error {
 	return c.JSON(http.StatusNoContent, "")
 }
 
-//Delete ...
+//Delete is method from posthandler
 func (pH *PostHandler) Delete(c echo.Context) error {
 	idP := c.Param("id")
 
@@ -70,7 +70,7 @@ func (pH *PostHandler) Delete(c echo.Context) error {
 	return c.JSON(http.StatusNoContent, "")
 }
 
-//Store ...
+//Store is method from posthandler
 func (pH *PostHandler) Store(c echo.Context) error {
 	var p models.Post
 	c.Bind(&p)
@@ -88,7 +88,7 @@ func (pH *PostHandler) Store(c echo.Context) error {
 	return c.JSON(http.StatusCreated, &p)
 }
 
-//GetByID ...
+//GetByID is method from posthandler
 func (pH *PostHandler) GetByID(c echo.Context) error {
 	idP := c.Param("id")
 
@@ -101,7 +101,7 @@ func (pH *PostHandler) GetByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, post)
 }
 
-// GetGroups ...
+// GetGroups is method from posthandler
 func (pH *PostHandler) GetGroups(c echo.Context) error {
 
 	pagination := models.Pagination{Start: 0, Limit: 100}
@@ -130,7 +130,7 @@ func (pH *PostHandler) GetGroups(c echo.Context) error {
 	return c.JSON(http.StatusOK, postsGroups)
 }
 
-//GetGroupsByTag ...
+//GetGroupsByTag is method from posthandler
 func (pH *PostHandler) GetGroupsByTag(c echo.Context) error {
 
 	tag := c.Param("tag")

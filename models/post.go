@@ -1,6 +1,6 @@
 package models
 
-// Post is struct for model post
+// Post represent model for post data
 type Post struct {
 	Title       string   `json:"title" bson:"title" validate:"required"`
 	Thumbnail   string   `json:"thumbnail" bson:"thumbnail" validate:"required"`
@@ -10,7 +10,7 @@ type Post struct {
 	Content     string   `json:"content" bson:"content" validate:"required"`
 }
 
-//PostsGroup is struct for postGroup
+//PostsGroup represent for postGroup data
 type PostsGroup struct {
 	Count int    `json:"count" bson:"count"`
 	Data  []Post `json:"data" bson:"data"`

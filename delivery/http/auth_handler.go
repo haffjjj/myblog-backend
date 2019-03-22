@@ -13,24 +13,24 @@ import (
 	"github.com/labstack/echo"
 )
 
-//AuthHandler ...
+//AuthHandler represent handler for auth
 type AuthHandler struct {
 	aUsecase auth.Usecase
 }
 
-//NewAuthHandler ...
+//NewAuthHandler represent initialitation authhandler
 func NewAuthHandler(c *echo.Echo, aU auth.Usecase) {
 	handler := &AuthHandler{aU}
 	c.POST("/auth", handler.Auth)
 }
 
-//Credential ...
+//Credential represent model for credential data
 type Credential struct {
 	Username string
 	Password string
 }
 
-//Auth is method Authhandler
+//Auth is method from Authhandler
 func (a *AuthHandler) Auth(c echo.Context) error {
 
 	var ct Credential
